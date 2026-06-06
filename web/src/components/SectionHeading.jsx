@@ -3,7 +3,7 @@ export default function SectionHeading({ label, title, description, center = fal
     <div className={center ? 'text-center' : ''}>
       {label && (
         <p
-          className={`text-xs font-bold uppercase tracking-[0.2em] ${
+          className={`text-[0.72rem] font-semibold uppercase tracking-[0.16em] ${
             light ? 'text-accent' : 'text-accent-dark'
           }`}
         >
@@ -11,7 +11,7 @@ export default function SectionHeading({ label, title, description, center = fal
         </p>
       )}
       <h2
-        className={`mt-2 text-2xl font-bold uppercase tracking-wide sm:text-3xl ${
+        className={`mt-2 text-2xl font-bold tracking-tight sm:text-3xl ${
           light ? 'text-white' : 'text-primary'
         }`}
       >

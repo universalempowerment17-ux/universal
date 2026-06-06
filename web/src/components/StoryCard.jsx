@@ -4,13 +4,13 @@ export default function StoryCard({ name, location, excerpt, story }) {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:shadow-md">
-      <div className="bg-gradient-to-br from-primary to-primary-dark px-6 py-5 text-white">
-        <p className="text-xs font-semibold uppercase tracking-widest text-accent">{location}</p>
-        <h3 className="mt-1 text-lg font-bold">{name}</h3>
+    <article className="flex flex-col overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(15,23,42,0.08)]">
+      <div className="border-b border-slate-100 bg-slate-50 px-6 py-5 text-slate-700">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">{location}</p>
+        <h3 className="mt-1 text-lg font-bold text-primary">{name}</h3>
       </div>
       <div className="flex flex-1 flex-col p-6">
-        <p className="text-sm leading-relaxed text-slate-600">
+        <p className="text-sm leading-relaxed text-slate-700">
           {expanded ? story : excerpt}
         </p>
         <button

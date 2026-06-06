@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import Hero from '../components/Hero'
 import GalleryGrid from '../components/GalleryGrid'
-import { fetchGalleryItems, sanityConfigured } from '../lib/sanity'
+import { fetchGalleryItems, fetchSiteSettings, sanityConfigured } from '../lib/sanity'
 
 export default function Gallery() {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [siteSettings, setSiteSettings] = useState(null)
 
   useEffect(() => {
     if (!sanityConfigured) {
@@ -14,8 +15,11 @@ export default function Gallery() {
       return
     }
 
-    fetchGalleryItems()
-      .then(setItems)
+    Promise.all([fetchGalleryItems(), fetchSiteSettings()])
+      .then(([galleryItems, settings]) => {
+        setItems(galleryItems)
+        setSiteSettings(settings)
+      })
       .catch(() => setError('Unable to load gallery. Please try again later.'))
       .finally(() => setLoading(false))
   }, [])
@@ -28,11 +32,13 @@ export default function Gallery() {
         subtitle="Photos and videos from our programmes, events, and community initiatives across India."
         showCta={false}
         compact
+        image={siteSettings?.galleryHeroImage}
+        imageAlt="Gallery hero image"
       />
 
       <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         {!sanityConfigured && (
-          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
             Sanity is not configured. Add <code className="font-mono">VITE_SANITY_PROJECT_ID</code> to your{' '}
             <code className="font-mono">.env</code> file to load gallery content.
           </div>
@@ -45,7 +51,7 @@ export default function Gallery() {
         )}
 
         {error && (
-          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {error}
           </div>
         )}

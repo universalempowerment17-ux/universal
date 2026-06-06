@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import Hero from '../components/Hero'
-import { fetchDonationSettings, sanityConfigured, urlFor } from '../lib/sanity'
+import { fetchDonationSettings, fetchGalleryItems, fetchSiteSettings, sanityConfigured, urlFor } from '../lib/sanity'
 
 export default function Donation() {
   const [settings, setSettings] = useState(null)
+  const [siteSettings, setSiteSettings] = useState(null)
+  const [galleryItems, setGalleryItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('qr')
 
@@ -13,12 +15,20 @@ export default function Donation() {
       return
     }
 
-    fetchDonationSettings()
-      .then(setSettings)
+    Promise.all([fetchDonationSettings(), fetchSiteSettings(), fetchGalleryItems()])
+      .then(([donationSettings, settings, items]) => {
+        setSettings(donationSettings)
+        setSiteSettings(settings)
+        setGalleryItems(items)
+      })
       .finally(() => setLoading(false))
   }, [])
 
   const qrUrl = settings?.qrCodeImage ? urlFor(settings.qrCodeImage).width(400).url() : null
+  const fallbackHeroImage =
+    siteSettings?.donationHeroImage ||
+    galleryItems.find((item) => item.mediaType === 'image')?.image ||
+    '/ngo-women.jpg'
 
   const bankFields = [
     { label: 'Account Name', value: settings?.accountName },
@@ -37,6 +47,8 @@ export default function Donation() {
         subtitle="Your generosity fuels our programmes. Choose a convenient way to contribute and help build stronger communities."
         showCta={false}
         compact
+        image={fallbackHeroImage}
+        imageAlt="Donation and support work"
       />
 
       <section className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
@@ -51,7 +63,7 @@ export default function Donation() {
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
           </div>
         ) : (
-          <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+          <div className="overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-sm">
             <div className="flex border-b border-slate-200">
               {[
                 { key: 'qr', label: 'Scan QR Code' },
@@ -81,7 +93,7 @@ export default function Donation() {
                   </p>
 
                   {qrUrl ? (
-                    <div className="mx-auto mt-6 inline-block rounded-xl bg-white p-4 shadow-md ring-1 ring-slate-200">
+                    <div className="mx-auto mt-6 inline-block rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                       <img src={qrUrl} alt="Donation QR Code" className="h-64 w-64 object-contain" />
                     </div>
                   ) : (
@@ -111,7 +123,7 @@ export default function Donation() {
                         field.value && (
                           <div
                             key={field.label}
-                            className="flex flex-col gap-1 rounded-lg bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+                            className="flex flex-col gap-1 rounded-xl bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
                           >
                             <dt className="text-sm font-medium text-slate-500">{field.label}</dt>
                             <dd className="font-mono text-sm font-semibold text-primary">{field.value}</dd>
@@ -120,7 +132,7 @@ export default function Donation() {
                     )}
                   </dl>
 
-                  {!bankFields.some((f) => f.value) && (
+                  {!bankFields.some((field) => field.value) && (
                     <p className="mt-6 text-center text-sm text-slate-400">
                       Bank details not added yet. Update them in Sanity Studio.
                     </p>
@@ -129,7 +141,7 @@ export default function Donation() {
               )}
 
               {settings?.donationNote && (
-                <div className="mt-6 rounded-lg bg-accent/10 px-4 py-3 text-sm text-slate-700">
+                <div className="mt-6 rounded-xl bg-accent/10 px-4 py-3 text-sm text-slate-700">
                   {settings.donationNote}
                 </div>
               )}

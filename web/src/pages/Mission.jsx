@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Hero from '../components/Hero'
 import SectionHeading from '../components/SectionHeading'
 import DonateBanner from '../components/DonateBanner'
+import { fetchGalleryItems, fetchSiteSettings, sanityConfigured } from '../lib/sanity'
 
 const interventions = [
   {
@@ -33,7 +34,7 @@ const interventions = [
     title: 'Livelihood Development',
     summary: 'Equipping communities with skills and resources for sustainable household incomes.',
     details:
-      'We provide vocational training, micro-enterprise support, and mentorship from industry experts. Women and youth learn business management, marketing, and financial planning — enabling them to scale small ventures into sustainable livelihoods.',
+      'We provide vocational training, micro-enterprise support, and mentorship from industry experts. Women and youth learn business management, marketing, and financial planning, enabling them to scale small ventures into sustainable livelihoods.',
     activities: ['Skill development', 'Micro-enterprise setup', 'Business mentorship', 'Market linkages'],
   },
   {
@@ -56,7 +57,22 @@ const interventions = [
 
 export default function Mission() {
   const [active, setActive] = useState(interventions[0].id)
-  const current = interventions.find((i) => i.id === active)
+  const [siteSettings, setSiteSettings] = useState(null)
+  const [galleryItems, setGalleryItems] = useState([])
+  const current = interventions.find((item) => item.id === active)
+
+  useEffect(() => {
+    if (!sanityConfigured) return
+    Promise.all([fetchSiteSettings(), fetchGalleryItems()]).then(([settings, items]) => {
+      setSiteSettings(settings)
+      setGalleryItems(items)
+    })
+  }, [])
+
+  const fallbackHeroImage =
+    siteSettings?.missionHeroImage ||
+    galleryItems.find((item) => item.mediaType === 'image')?.image ||
+    '/ngo-outreach.jpg'
 
   return (
     <>
@@ -65,29 +81,31 @@ export default function Mission() {
         subtitle="Creating pathways to dignity, opportunity, and self-reliance through community-led programmes."
         showCta={false}
         compact
+        image={fallbackHeroImage}
+        imageAlt="Fieldwork and community engagement"
       />
 
       <section className="section-pad mx-auto max-w-6xl px-4 sm:px-6">
         <div className="grid gap-8 lg:grid-cols-3">
-          <div className="rounded-xl bg-primary p-6 text-white lg:col-span-1">
-            <p className="text-xs font-bold uppercase tracking-widest text-accent">Mission</p>
-            <p className="mt-4 text-sm leading-relaxed text-slate-200">
+          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm lg:col-span-1">
+            <p className="text-xs font-bold uppercase tracking-widest text-primary">Mission</p>
+            <p className="mt-4 text-sm leading-relaxed text-slate-600">
               To empower underserved communities through education, healthcare, livelihood, and women
-              empowerment programmes — fostering self-reliance and lasting positive change.
+              empowerment programmes, fostering self-reliance and lasting positive change.
             </p>
           </div>
-          <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 lg:col-span-1">
+          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm lg:col-span-1">
             <p className="text-xs font-bold uppercase tracking-widest text-accent-dark">Vision</p>
             <p className="mt-4 text-sm leading-relaxed text-slate-600">
-              A society where every individual — especially women and marginalized communities — has
+              A society where every individual, especially women and marginalized communities, has
               equal rights, opportunities, and access to resources to build a dignified future.
             </p>
           </div>
-          <div className="rounded-xl border-l-4 border-accent bg-surface p-6 lg:col-span-1">
+          <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm lg:col-span-1">
             <p className="text-xs font-bold uppercase tracking-widest text-primary">Approach</p>
             <p className="mt-4 text-sm leading-relaxed text-slate-600">
               We listen first, partner with local leaders and government institutions, and design
-              programmes communities own and sustain — because real empowerment comes from within.
+              programmes communities own and sustain because real empowerment comes from within.
             </p>
           </div>
         </div>
@@ -107,7 +125,7 @@ export default function Mission() {
                 key={item.id}
                 type="button"
                 onClick={() => setActive(item.id)}
-                className={`rounded px-4 py-2 text-xs font-bold uppercase tracking-wide transition ${
+                className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide transition ${
                   active === item.id
                     ? 'bg-primary text-white'
                     : 'bg-surface text-slate-600 ring-1 ring-slate-200 hover:bg-slate-100'
@@ -123,14 +141,14 @@ export default function Mission() {
               <div className="lg:col-span-3">
                 <h3 className="text-xl font-bold uppercase tracking-wide text-primary">{current.title}</h3>
                 <p className="mt-2 text-sm font-medium text-accent-dark">{current.summary}</p>
-                <p className="mt-4 text-slate-600 leading-relaxed">{current.details}</p>
+                <p className="mt-4 leading-relaxed text-slate-600">{current.details}</p>
               </div>
-              <div className="rounded-xl bg-primary p-6 text-white lg:col-span-2">
-                <p className="text-xs font-bold uppercase tracking-widest text-accent">Key Activities</p>
+              <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 lg:col-span-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-800">Key Activities</p>
                 <ul className="mt-4 space-y-3">
                   {current.activities.map((activity) => (
-                    <li key={activity} className="flex gap-2 text-sm text-slate-200">
-                      <span className="text-accent">✓</span> {activity}
+                    <li key={activity} className="flex gap-2 text-sm text-slate-600">
+                      <span className="text-accent">*</span> {activity}
                     </li>
                   ))}
                 </ul>
@@ -140,14 +158,13 @@ export default function Mission() {
         </div>
       </section>
 
-      <section className="bg-primary py-14 text-white">
+      <section className="border-y border-slate-200 bg-slate-50 py-14 text-slate-700">
         <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
           <SectionHeading
             label="Join Us"
             title="Be Part Of The Change"
             description="Whether through donations or volunteering, you can help us empower more communities across India."
             center
-            light
           />
         </div>
       </section>

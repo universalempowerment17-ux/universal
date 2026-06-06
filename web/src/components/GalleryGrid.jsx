@@ -68,7 +68,7 @@ function GalleryCard({ item, onOpen }) {
     <button
       type="button"
       onClick={() => onOpen(item)}
-      className="group relative overflow-hidden rounded-xl bg-slate-200 text-left shadow-sm transition hover:shadow-md"
+      className="group relative overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-[0_14px_30px_rgba(15,23,42,0.08)]"
     >
       {thumb ? (
         <img
@@ -78,14 +78,14 @@ function GalleryCard({ item, onOpen }) {
           loading="lazy"
         />
       ) : (
-        <div className="flex aspect-[4/3] items-center justify-center bg-slate-200 text-slate-400">
+        <div className="flex aspect-[4/3] items-center justify-center bg-slate-50 text-slate-400">
           No preview
         </div>
       )}
 
       {isVideo && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-primary shadow-lg">
+        <div className="absolute inset-0 flex items-center justify-center bg-white/10">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-primary shadow-lg">
             <svg className="ml-1 h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
             </svg>
@@ -93,11 +93,11 @@ function GalleryCard({ item, onOpen }) {
         </div>
       )}
 
-      <div className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-xs font-medium text-white">
+      <div className="absolute left-3 top-3 rounded-full bg-white px-2.5 py-1 text-xs font-medium text-slate-700 shadow-sm backdrop-blur">
         {isVideo ? 'Video' : 'Photo'}
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-900/65 to-transparent p-3">
         <p className="truncate text-sm font-medium text-white">{item.title}</p>
       </div>
     </button>
@@ -115,7 +115,7 @@ export default function GalleryGrid({ items, filter = 'all' }) {
 
   if (!items.length) {
     return (
-      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-12 text-center">
+      <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-12 text-center">
         <p className="text-lg font-medium text-slate-600">No gallery items yet</p>
         <p className="mt-2 text-sm text-slate-500">
           Add photos in Sanity Studio or paste YouTube links for videos.
@@ -139,7 +139,7 @@ export default function GalleryGrid({ items, filter = 'all' }) {
             className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
               activeFilter === f.key
                 ? 'bg-primary text-white'
-                : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50'
+                : 'bg-white/90 text-slate-600 ring-1 ring-slate-200 hover:bg-white'
             }`}
           >
             {f.label}

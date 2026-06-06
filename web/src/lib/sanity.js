@@ -38,6 +38,21 @@ export async function fetchGalleryItems() {
   )
 }
 
+export async function fetchStoryItems() {
+  if (!client) return []
+  return client.fetch(
+    `*[_type == "storyItem"] | order(order asc, publishedAt desc, _createdAt desc) {
+      _id,
+      name,
+      location,
+      excerpt,
+      story,
+      order,
+      publishedAt
+    }`
+  )
+}
+
 export async function fetchDonationSettings() {
   if (!client) return null
   return client.fetch(
@@ -50,6 +65,23 @@ export async function fetchDonationSettings() {
       ifscCode,
       branch,
       donationNote
+    }`
+  )
+}
+
+export async function fetchSiteSettings() {
+  if (!client) return null
+  return client.fetch(
+    `*[_type == "siteSettings"][0] {
+      homeHeroImages,
+      homeHeroImage,
+      homeFeatureImage,
+      impactStats,
+      founderImage,
+      aboutHeroImage,
+      missionHeroImage,
+      galleryHeroImage,
+      donationHeroImage
     }`
   )
 }
