@@ -1,162 +1,261 @@
 # Universal Empowerment Foundation Website
 
-Static NGO website built with React, Tailwind CSS, Sanity CMS, and Firebase Hosting.
+A professional NGO website for **Universal Empowerment Foundation**, built with React, Vite, Tailwind CSS, Sanity CMS, and Firebase Hosting.
 
-## Pages
+Live website:
+- https://universal-empowerment-a5422.web.app
 
-- **Home** — hero, impact stats, mission teaser, gallery preview
-- **About Us** — organization story and values
-- **Our Mission** — mission, vision, and programs
-- **Gallery** — photos (uploaded to Sanity) and videos (YouTube links in Sanity)
-- **Donation** — QR code scan and bank transfer details (managed in Sanity)
+Live Sanity Studio:
+- https://universalempowermentfoundation.sanity.studio/
 
-## Project Structure
+## What This Project Includes
 
-```
-universal-empowerment-foundation/
-├── web/          # React + Vite frontend
-├── studio/       # Sanity CMS admin panel
-├── firebase.json # Firebase Hosting config
-└── README.md
-```
-
-## Prerequisites
-
-- Node.js 18+
-- [Sanity account](https://www.sanity.io)
-- [Firebase account](https://firebase.google.com)
-
-## Setup
-
-### 1. Install dependencies
-
-```bash
-cd web && npm install
-cd ../studio && npm install
-```
-
-### 2. Create a Sanity project
-
-1. Go to [sanity.io/manage](https://www.sanity.io/manage) and create a new project.
-2. Copy your **Project ID**.
-
-### 3. Configure environment variables
-
-**Web** (`web/.env`):
-
-```
-VITE_SANITY_PROJECT_ID=your-project-id
-VITE_SANITY_DATASET=production
-VITE_FORM_SUBMIT_URL=https://script.google.com/macros/s/your-script-id/exec
-```
-
-**Studio** (`studio/.env`):
-
-```
-SANITY_STUDIO_PROJECT_ID=your-project-id
-SANITY_STUDIO_DATASET=production
-```
-
-Update `studio/sanity.config.js` and `studio/sanity.cli.js` with your project ID, or use the env vars above.
-
-### 4. Configure Sanity CORS
-
-In [sanity.io/manage](https://www.sanity.io/manage) → your project → **API** → **CORS origins**, add:
-
-- `http://localhost:5173` (local dev)
-- Your Firebase Hosting URL (e.g. `https://your-project.web.app`)
-
-### 5. Run locally
-
-```bash
-# Frontend
-npm run dev
-
-# Sanity Studio (separate terminal)
-npm run studio
-```
-
-Studio runs at `http://localhost:3333`.
-
-### 6. Add content in Sanity Studio
-
-**Donation Settings** (singleton document):
-
-- Upload QR code image
-- Add bank details and optional UPI ID
-
-**Gallery Items**:
-
-- **Photos**: set Media Type to "Photo" and upload an image
-- **Videos**: upload to YouTube, set Media Type to "Video (YouTube)", paste the YouTube link
-
-## Popup Form → Excel Sheet
-
-The "Stay Updated" popup saves submissions to a **Google Sheet** (downloadable as Excel).
-
-### Setup (one-time)
-
-1. Create a new [Google Sheet](https://sheets.google.com).
-2. Go to **Extensions → Apps Script**.
-3. Paste the code from [`scripts/google-sheet-form-handler.gs`](scripts/google-sheet-form-handler.gs) and **Save**.
-4. Click **Deploy → New deployment → Web app**:
-   - Execute as: **Me**
-   - Who has access: **Anyone**
-5. Copy the **Web App URL** and add it to `web/.env`:
-
-```
-VITE_FORM_SUBMIT_URL=https://script.google.com/macros/s/xxxx/exec
-```
-
-6. Rebuild and redeploy the website.
-
-Each submission adds a row: **Timestamp | Name | Phone | Email**
-
-**Download as Excel:** In Google Sheets → **File → Download → Microsoft Excel (.xlsx)**
-
-## Deploy
-
-### Sanity Studio
-
-```bash
-cd studio
-npm run deploy
-```
-
-This hosts your admin panel at `https://your-project.sanity.studio`.
-
-### Firebase Hosting
-
-1. Install Firebase CLI: `npm install -g firebase-tools`
-2. Login: `firebase login`
-3. Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
-4. Update `.firebaserc` with your Firebase project ID
-5. Deploy:
-
-```bash
-npm run deploy
-```
-
-Or manually:
-
-```bash
-cd web && npm run build
-firebase deploy --only hosting
-```
-
-## Gallery Videos (YouTube)
-
-Videos are **not** uploaded to Sanity. The workflow is:
-
-1. Upload the video to **YouTube**
-2. Copy the YouTube URL (`youtube.com/watch?v=...`, `youtu.be/...`, or `youtube.com/shorts/...`)
-3. In Sanity Studio, create a Gallery Item with Media Type = **Video (YouTube)** and paste the link
-4. The website embeds the video automatically
+- Responsive public website with a clean NGO-focused design
+- Rotating homepage hero images from Sanity
+- Animated homepage impact counters from Sanity
+- About, Our Work, Programs, Gallery, Donation, and Contact pages
+- Founder message and belief sections on the homepage
+- Stories of change section powered by Sanity
+- Gallery with photos and YouTube videos
+- Donation page with QR / bank details from Sanity
+- Contact and volunteer forms that send submissions directly to WhatsApp
+- Firebase Hosting deployment for the website
+- Sanity Studio deployment for content editing
 
 ## Tech Stack
 
-- React 19 + Vite
+- React 19
+- Vite
 - Tailwind CSS 4
 - React Router
 - Sanity CMS v3
 - Firebase Hosting
+
+## Repository Structure
+
+```bash
+universal-empowerment-foundation/
+|-- web/                   # Public website
+|-- studio/                # Sanity Studio
+|-- firebase.json          # Firebase Hosting config
+|-- package.json           # Root commands
+`-- scripts/               # Optional helper scripts
+```
+
+## Main Website Pages
+
+- **Home**: hero slider, belief section, founder message, our work summary, interventions, impact counters, stories, gallery preview
+- **About Us**: mission and organization story
+- **Our Work**: what the foundation does and how it supports communities
+- **Programs**: program cards and programme-focused content
+- **Gallery**: image and video gallery with expandable viewing
+- **Donate**: donation details, QR code, and donation note
+- **Contact Us**: contact details, map/link buttons, and contact form
+
+## Sanity-Powered Content
+
+The public website reads content from these Sanity documents:
+
+- `siteSettings`
+  - home hero images
+  - belief/about image
+  - impact stats
+  - founder image
+  - page hero images
+- `donationSettings`
+  - QR code
+  - UPI ID
+  - bank account details
+  - donation note
+- `galleryItem`
+  - image or YouTube video
+  - publish date
+  - order
+- `storyItem`
+  - name
+  - location
+  - image
+  - excerpt
+  - full story
+  - order
+
+## Forms and WhatsApp Flow
+
+The volunteer and contact forms:
+
+- collect name, phone, email, and message
+- enforce field limits for basic safety
+- limit repeated submissions per session
+- open WhatsApp with a prefilled message to the admin number
+
+Configure the admin WhatsApp number with:
+
+```env
+VITE_ADMIN_WHATSAPP_NUMBER=91XXXXXXXXXX
+```
+
+If the value is a 10-digit Indian number, the app automatically prefixes `91`.
+
+## Environment Variables
+
+### `web/.env`
+
+```env
+VITE_SANITY_PROJECT_ID=ko39xasb
+VITE_SANITY_DATASET=production
+VITE_ADMIN_WHATSAPP_NUMBER=91XXXXXXXXXX
+```
+
+### `studio/.env`
+
+```env
+SANITY_STUDIO_PROJECT_ID=ko39xasb
+SANITY_STUDIO_DATASET=production
+```
+
+## Local Setup
+
+### 1) Install dependencies
+
+```bash
+cd web
+npm install
+cd ../studio
+npm install
+```
+
+### 2) Start the website locally
+
+From the project root:
+
+```bash
+npm run dev
+```
+
+The Vite app runs on:
+
+- http://localhost:5173
+
+### 3) Start Sanity Studio locally
+
+```bash
+npm run studio
+```
+
+The Studio runs on:
+
+- http://localhost:3333
+
+## Sanity Content Setup
+
+After opening the Studio, create or update the following content:
+
+### Site Settings
+
+- Add 2 to 4 homepage hero images
+- Add the homepage belief/about image
+- Add impact stats as label/value pairs
+- Add the founder image
+- Add hero images for About, Our Work, Programs, Gallery, Donation, and Contact pages
+
+### Impact Stats
+
+Each impact card should include:
+
+- `Label`
+- `Value`
+
+Example:
+
+- `Lives touched` - `10,000+`
+- `Community programs` - `30+`
+- `Women trained` - `500+`
+
+### Gallery Items
+
+- **Photo**: upload an image
+- **Video (YouTube)**: paste a valid YouTube link
+- lower `order` values appear first
+
+### Story Items
+
+- `Name`
+- `Location`
+- `Excerpt`
+- `Story`
+- optional image
+- lower `order` values appear first
+
+### Donation Settings
+
+- QR code image
+- UPI ID
+- account holder name
+- bank name
+- account number
+- IFSC code
+- branch
+- donation note
+
+## Build and Deploy
+
+### Build the website
+
+```bash
+npm run build
+```
+
+This builds the frontend into `web/dist`.
+
+### Deploy to Firebase Hosting
+
+```bash
+npm run deploy
+```
+
+This runs the production build and deploys the website to Firebase Hosting.
+
+You can also deploy manually:
+
+```bash
+cd web
+npm run build
+cd ..
+firebase deploy --only hosting
+```
+
+### Deploy Sanity Studio
+
+```bash
+cd studio
+npm exec sanity -- deploy -y
+```
+
+If Sanity asks for a hostname, choose the existing studio hostname:
+
+- `universalempowermentfoundation`
+
+## Firebase Hosting
+
+Firebase serves the compiled frontend from `web/dist` and rewrites all routes to `index.html`, so React Router works correctly on refresh.
+
+The current Firebase project is:
+
+- `universal-empowerment-a5422`
+
+## Helpful Notes
+
+- The site is designed to be responsive across desktop, tablet, and mobile screens.
+- The homepage impact counters animate from `0` up to the configured value.
+- The hero background rotates through multiple Sanity images.
+- The gallery supports both photos and YouTube videos.
+- The website currently uses Firebase instead of Vercel.
+
+## Useful Commands
+
+```bash
+npm run dev       # Start the website locally
+npm run studio    # Start Sanity Studio locally
+npm run build     # Build the website
+npm run deploy    # Build and deploy to Firebase Hosting
+```

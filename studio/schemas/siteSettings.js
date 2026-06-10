@@ -13,45 +13,44 @@ export default defineType({
       description: 'Add 2-4 images for the rotating homepage hero background.',
     }),
     defineField({
-      name: 'homeHeroImage',
-      title: 'Home Hero Image',
+      name: 'homeBeliefImage',
+      title: 'Home Belief Image',
       type: 'image',
       options: { hotspot: true },
-      description: 'Main image shown on the homepage hero.',
-    }),
-    defineField({
-      name: 'homeFeatureImage',
-      title: 'Home Feature Image',
-      type: 'image',
-      options: { hotspot: true },
-      description: 'Image used in the homepage feature / story section.',
+      description: 'Image used in the homepage belief / about block.',
     }),
     defineField({
       name: 'impactStats',
       title: 'Impact Stats',
       type: 'array',
-      description: 'Edit the homepage impact numbers and labels from the admin panel.',
+      description: 'Add or remove impact cards for the homepage. Each card needs a label and a value.',
       of: [
         {
           type: 'object',
           fields: [
-            defineField({
-              name: 'value',
-              title: 'Value',
-              type: 'string',
-              validation: (Rule) => Rule.required(),
-            }),
             defineField({
               name: 'label',
               title: 'Label',
               type: 'string',
               validation: (Rule) => Rule.required(),
             }),
+            defineField({
+              name: 'value',
+              title: 'Value',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
           ],
           preview: {
             select: {
-              title: 'value',
-              subtitle: 'label',
+              label: 'label',
+              value: 'value',
+            },
+            prepare({ label, value }) {
+              return {
+                title: label || 'Missing label',
+                subtitle: value || 'Missing value',
+              }
             },
           },
         },
@@ -72,11 +71,11 @@ export default defineType({
       description: 'Main image shown on the About page hero.',
     }),
     defineField({
-      name: 'missionHeroImage',
-      title: 'Mission Hero Image',
+      name: 'ourWorkHeroImage',
+      title: 'Our Work Hero Image',
       type: 'image',
       options: { hotspot: true },
-      description: 'Main image shown on the Mission page hero.',
+      description: 'Main image shown on the Our Work page hero.',
     }),
     defineField({
       name: 'galleryHeroImage',
@@ -86,11 +85,25 @@ export default defineType({
       description: 'Main image shown on the Gallery page hero.',
     }),
     defineField({
+      name: 'programsHeroImage',
+      title: 'Programs Hero Image',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Main image shown on the Programs page hero.',
+    }),
+    defineField({
       name: 'donationHeroImage',
       title: 'Donation Hero Image',
       type: 'image',
       options: { hotspot: true },
       description: 'Main image shown on the Donation page hero.',
+    }),
+    defineField({
+      name: 'contactHeroImage',
+      title: 'Contact Hero Image',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Main image shown on the Contact page hero.',
     }),
   ],
   preview: {

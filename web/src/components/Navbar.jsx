@@ -4,9 +4,11 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About Us' },
-  { to: '/mission', label: 'Our Mission' },
+  { to: '/our-work', label: 'Our Work' },
+  { to: '/programs', label: 'Programs' },
   { to: '/gallery', label: 'Gallery' },
   { to: '/donation', label: 'Donate' },
+  { to: '/contact', label: 'Contact Us' },
 ]
 
 export default function Navbar() {
@@ -20,11 +22,13 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4">
       <div className="mx-auto max-w-6xl">
-        <div className="flex items-center justify-between rounded-[1.25rem] border border-slate-200 bg-white px-4 py-3 shadow-[0_8px_24px_rgba(15,23,42,0.04)] sm:px-5">
+        <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-[0_8px_24px_rgba(15,23,42,0.04)] sm:px-5">
           <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-white shadow-sm">
-              UEF
-            </div>
+            <img
+              src="/uef-logo.webp"
+              alt="Universal Empowerment Foundation logo"
+              className="h-12 w-12 rounded-full bg-white object-cover shadow-sm ring-1 ring-slate-200"
+            />
             <div className="hidden sm:block">
               <p className="text-sm font-semibold tracking-wide text-slate-900">
                 Universal Empowerment Foundation
@@ -70,7 +74,7 @@ export default function Navbar() {
         </div>
 
         {open && (
-          <nav id="mobile-navigation" className="mt-3 rounded-[1.25rem] border border-slate-200 bg-white p-3 shadow-[0_12px_30px_rgba(15,23,42,0.04)] lg:hidden">
+          <nav id="mobile-navigation" className="mt-3 rounded-2xl border border-slate-200 bg-white p-3 shadow-[0_12px_30px_rgba(15,23,42,0.04)] lg:hidden">
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <NavLink

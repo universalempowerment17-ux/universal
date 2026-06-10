@@ -18,6 +18,13 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'image',
+      title: 'Image',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Optional story image. The website will display it in webp format.',
+    }),
+    defineField({
       name: 'excerpt',
       title: 'Excerpt',
       type: 'text',

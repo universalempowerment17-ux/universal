@@ -15,6 +15,7 @@ export default defineConfig({
           .title('Content')
           .items([
             S.listItem()
+              .id('siteSettingsSingleton')
               .title('Site Settings')
               .child(
                 S.document()
@@ -22,6 +23,7 @@ export default defineConfig({
                   .documentId('siteSettings')
               ),
             S.listItem()
+              .id('donationSettingsSingleton')
               .title('Donation Settings')
               .child(
                 S.document()
@@ -30,7 +32,7 @@ export default defineConfig({
               ),
             S.divider(),
             ...S.documentTypeListItems().filter(
-              (item) => !['donationSettings'].includes(item.getId())
+              (item) => !['siteSettings', 'donationSettings'].includes(item.getId())
             ),
           ]),
     }),

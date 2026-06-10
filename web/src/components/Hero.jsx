@@ -58,6 +58,9 @@ export default function Hero({
   images = [],
   imageAlt = '',
   stats = [],
+  secondaryCtaLabel = 'Our Work',
+  secondaryCtaHref = '/our-work',
+  secondaryCtaAction,
 }) {
   const slideList = useMemo(() => {
     const explicitSlides = images.map(resolveSlide).filter(Boolean)
@@ -90,7 +93,7 @@ export default function Hero({
 
   return (
     <section className={`relative overflow-hidden text-slate-800 ${compact ? 'py-16 sm:py-20' : 'py-20 sm:py-28'}`}>
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,_#ffffff_0%,_#f7f9fc_100%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white to-slate-50" />
 
       {slideList.length > 0 && (
         <div className="absolute inset-0">
@@ -107,7 +110,7 @@ export default function Hero({
         </div>
       )}
 
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(255,255,255,0.05)_0%,_rgba(255,255,255,0.03)_45%,_rgba(15,23,42,0.1)_100%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/5 via-white/3 to-slate-900/10" />
       <div className="absolute inset-0">
         <div className="absolute bottom-0 left-0 h-64 w-full bg-gradient-to-t from-white/45 to-transparent" />
       </div>
@@ -131,24 +134,36 @@ export default function Hero({
               >
                 Donate Now
               </Link>
-              <Link
-                to="/mission"
-                className="rounded-full border border-slate-200 bg-white px-7 py-3 text-sm font-bold uppercase tracking-wide text-slate-700 transition hover:bg-slate-50"
-              >
-                Our Work
-              </Link>
+              {secondaryCtaAction ? (
+                <button
+                  type="button"
+                  onClick={secondaryCtaAction}
+                  className="rounded-full border border-slate-200 bg-white px-7 py-3 text-sm font-bold uppercase tracking-wide text-slate-700 transition hover:bg-slate-50"
+                >
+                  {secondaryCtaLabel}
+                </button>
+              ) : (
+                <Link
+                  to={secondaryCtaHref}
+                  className="rounded-full border border-slate-200 bg-white px-7 py-3 text-sm font-bold uppercase tracking-wide text-slate-700 transition hover:bg-slate-50"
+                >
+                  {secondaryCtaLabel}
+                </Link>
+              )}
             </div>
           )}
 
           {stats.length > 0 && (
-            <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:max-w-4xl lg:grid-cols-4">
               {stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-2xl border border-white/60 bg-white/85 px-4 py-4 backdrop-blur-sm"
+                  className="rounded-2xl border border-white/70 bg-white/80 px-4 py-4 shadow-[0_12px_30px_rgba(15,23,42,0.06)] backdrop-blur-md"
                 >
-                  <p className="text-2xl font-bold text-primary">{stat.value}</p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.2em] text-slate-600">{stat.label}</p>
+                  <p className="text-xl font-bold text-primary sm:text-2xl">{stat.value}</p>
+                  <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-600">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
@@ -168,11 +183,6 @@ export default function Hero({
                 }`}
               />
             ))}
-            {slideList[activeIndex]?.label ? (
-              <p className="ml-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">
-                {slideList[activeIndex].label}
-              </p>
-            ) : null}
           </div>
         )}
       </div>

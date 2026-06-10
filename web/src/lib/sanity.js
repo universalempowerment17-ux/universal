@@ -25,10 +25,8 @@ export function urlFor(source) {
 export async function fetchGalleryItems() {
   if (!client) return []
   return client.fetch(
-    `*[_type == "galleryItem"] | order(order asc, publishedAt desc) {
+    `*[_type == "galleryItem"] | order(_createdAt desc) {
       _id,
-      title,
-      caption,
       mediaType,
       image,
       youtubeUrl,
@@ -40,11 +38,12 @@ export async function fetchGalleryItems() {
 
 export async function fetchStoryItems() {
   if (!client) return []
-  return client.fetch(
-    `*[_type == "storyItem"] | order(order asc, publishedAt desc, _createdAt desc) {
+    return client.fetch(
+      `*[_type == "storyItem"] | order(order asc, publishedAt desc, _createdAt desc) {
       _id,
       name,
       location,
+      image,
       excerpt,
       story,
       order,
@@ -74,14 +73,15 @@ export async function fetchSiteSettings() {
   return client.fetch(
     `*[_type == "siteSettings"][0] {
       homeHeroImages,
-      homeHeroImage,
-      homeFeatureImage,
+      homeBeliefImage,
       impactStats,
       founderImage,
       aboutHeroImage,
-      missionHeroImage,
+      ourWorkHeroImage,
       galleryHeroImage,
-      donationHeroImage
+      programsHeroImage,
+      donationHeroImage,
+      contactHeroImage
     }`
   )
 }

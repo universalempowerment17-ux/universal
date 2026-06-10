@@ -6,18 +6,6 @@ export default defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'caption',
-      title: 'Caption',
-      type: 'text',
-      rows: 3,
-    }),
-    defineField({
       name: 'mediaType',
       title: 'Media Type',
       type: 'string',
@@ -82,14 +70,14 @@ export default defineType({
   ],
   preview: {
     select: {
-      title: 'title',
       mediaType: 'mediaType',
+      order: 'order',
       media: 'image',
     },
-    prepare({ title, mediaType, media }) {
+    prepare({ mediaType, order, media }) {
       return {
-        title,
-        subtitle: mediaType === 'video' ? 'YouTube Video' : 'Photo',
+        title: mediaType === 'video' ? 'Video' : 'Photo',
+        subtitle: typeof order === 'number' ? `Order ${order}` : mediaType === 'video' ? 'YouTube Video' : 'Photo',
         media,
       }
     },
