@@ -23,7 +23,3 @@ body {
 .section-pad {
   @apply py-16 sm:py-20;
 }
-
-.uef-contact-panel {
-  background: linear-gradient(180deg, rgba(31, 111, 91, 0.98) 0%, rgba(21, 84, 67, 0.96) 100%);
-}

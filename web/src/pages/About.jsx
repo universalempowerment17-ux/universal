@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import Hero from '../components/Hero'
 import SectionHeading from '../components/SectionHeading'
 import DonateBanner from '../components/DonateBanner'
-import { fetchSiteSettings, sanityConfigured } from '../lib/sanity'
+import { fetchGalleryItems, fetchSiteSettings, sanityConfigured } from '../lib/sanity'
 
 const values = [
   {
@@ -33,13 +33,20 @@ const pillars = [
 
 export default function About() {
   const [siteSettings, setSiteSettings] = useState(null)
+  const [galleryItems, setGalleryItems] = useState([])
 
   useEffect(() => {
     if (!sanityConfigured) return
-    fetchSiteSettings().then(setSiteSettings)
+    Promise.all([fetchSiteSettings(), fetchGalleryItems()]).then(([settings, items]) => {
+      setSiteSettings(settings)
+      setGalleryItems(items)
+    })
   }, [])
 
-  const fallbackHeroImage = siteSettings?.aboutHeroImage || null
+  const fallbackHeroImage =
+    siteSettings?.aboutHeroImage ||
+    galleryItems.find((item) => item.mediaType === 'image')?.image ||
+    '/ngo-group.jpg'
 
   return (
     <>
@@ -57,17 +64,22 @@ export default function About() {
         <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start">
           <div className="space-y-4 leading-relaxed text-slate-700">
             <p>
-              Universal Empowerment Foundation is a non-profit organization working for the education,
-              empowerment, and inclusion of children and families from special needs and underprivileged
-              backgrounds.
+              Universal Empowerment Foundation was founded on the belief that every person deserves the
+              opportunity to live with dignity, independence, and hope. What began as a small volunteer
+              initiative supporting local schools has grown into a movement touching thousands of lives
+              in rural and urban underserved areas.
             </p>
             <p>
-              Our mission is to provide quality learning opportunities, emotional support, counselling,
-              and skill-based development so that every child can grow with confidence, dignity, and
-              independence.
+              Inspired by the nation-building spirit of community-led development, we work through
+              grassroots volunteers, peer educators, and community health champions, empowering people to
+              seek healthcare, education, and livelihood opportunities on their own terms.
+            </p>
+            <p>
+              Today, our programmes span education, healthcare, women empowerment, and livelihood
+              development, always designed with communities, for communities.
             </p>
           </div>
-          <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
             <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-800">At A Glance</h3>
             <ul className="mt-6 space-y-4 text-sm text-slate-600">
               <li className="flex gap-3 border-b border-slate-200 pb-3">
@@ -128,10 +140,10 @@ export default function About() {
         </div>
         <div className="mt-10 text-center">
           <Link
-            to="/our-work"
+            to="/mission"
             className="inline-flex rounded-full bg-accent px-6 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-accent-dark"
           >
-            Explore Our Work
+            Explore Our Mission
           </Link>
         </div>
       </section>

@@ -4,11 +4,9 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About Us' },
-  { to: '/our-work', label: 'Our Work' },
-  { to: '/programs', label: 'Programs' },
+  { to: '/mission', label: 'Our Mission' },
   { to: '/gallery', label: 'Gallery' },
   { to: '/donation', label: 'Donate' },
-  { to: '/contact', label: 'Contact Us' },
 ]
 
 export default function Navbar() {
@@ -24,11 +22,9 @@ export default function Navbar() {
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-[0_8px_24px_rgba(15,23,42,0.04)] sm:px-5">
           <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/uef-logo.webp"
-              alt="Universal Empowerment Foundation logo"
-              className="h-12 w-12 rounded-full bg-white object-cover shadow-sm ring-1 ring-slate-200"
-            />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-sm font-bold text-white shadow-sm">
+              UEF
+            </div>
             <div className="hidden sm:block">
               <p className="text-sm font-semibold tracking-wide text-slate-900">
                 Universal Empowerment Foundation

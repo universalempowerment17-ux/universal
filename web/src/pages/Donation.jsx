@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import Hero from '../components/Hero'
-import { fetchDonationSettings, fetchSiteSettings, sanityConfigured, urlFor } from '../lib/sanity'
+import { fetchDonationSettings, fetchGalleryItems, fetchSiteSettings, sanityConfigured, urlFor } from '../lib/sanity'
 
 export default function Donation() {
   const [settings, setSettings] = useState(null)
   const [siteSettings, setSiteSettings] = useState(null)
+  const [galleryItems, setGalleryItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('qr')
 
@@ -14,16 +15,20 @@ export default function Donation() {
       return
     }
 
-    Promise.all([fetchDonationSettings(), fetchSiteSettings()])
-      .then(([donationSettings, settings]) => {
+    Promise.all([fetchDonationSettings(), fetchSiteSettings(), fetchGalleryItems()])
+      .then(([donationSettings, settings, items]) => {
         setSettings(donationSettings)
         setSiteSettings(settings)
+        setGalleryItems(items)
       })
       .finally(() => setLoading(false))
   }, [])
 
   const qrUrl = settings?.qrCodeImage ? urlFor(settings.qrCodeImage).width(400).url() : null
-  const fallbackHeroImage = siteSettings?.donationHeroImage || null
+  const fallbackHeroImage =
+    siteSettings?.donationHeroImage ||
+    galleryItems.find((item) => item.mediaType === 'image')?.image ||
+    '/ngo-women.jpg'
 
   const bankFields = [
     { label: 'Account Name', value: settings?.accountName },
@@ -37,9 +42,9 @@ export default function Donation() {
   return (
     <>
       <Hero
-        label="Donate & Support"
-        title="Support Our Mission"
-        subtitle="Your contribution can help us provide education, learning material, counselling, therapy support, and skill development opportunities to children who need it the most."
+        label="Support Our Cause"
+        title="Donate For Empowerment"
+        subtitle="Your generosity fuels our programmes. Choose a convenient way to contribute and help build stronger communities."
         showCta={false}
         compact
         image={fallbackHeroImage}
@@ -58,7 +63,7 @@ export default function Donation() {
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
           </div>
         ) : (
-          <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="flex border-b border-slate-200">
               {[
                 { key: 'qr', label: 'Scan QR Code' },
