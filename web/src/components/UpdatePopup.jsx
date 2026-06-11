@@ -80,7 +80,7 @@ export default function UpdatePopup() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 px-4 pb-4 pt-24 sm:pt-28"
       role="dialog"
       aria-modal="true"
       aria-labelledby="update-popup-title"
