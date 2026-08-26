@@ -1,4 +1,4 @@
-# Universal Empowerment Foundation Website
+# Universal Empowerment Foundation Website - Freelance
 
 Static NGO website built with React, Tailwind CSS, Sanity CMS, and Firebase Hosting.
 
